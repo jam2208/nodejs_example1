@@ -1,11 +1,24 @@
-// server.js
+// test
 
-// Node.js에 기본 내장되어 있는 http 모듈을 로드한다.
 const http = require('http');
 
-// http 모듈의 createServer 메소드를 호출하여 HTTP 서버 생성
+
 http.createServer(function (request, response) {
-    response.writeHead(200, {'Content-Type': 'text/plain'}); // (1)
-    response.write('Hello World');
+    const baseUrl = 'http://' + request.headers.host + '/';
+    const newUrl = new URL(request.url, baseUrl);
+
+    const pathname = newUrl.pathname;
+    console.log('Path name is' + pathname);
+
+    const query = newUrl.searchParams;
+    console.log('Request parameter is ', query);
+
+    response.writeHead(200, {'Content-Type': 'text/html'}); // (1)
+    response.write(
+        '<h1>Path name is' + pathname + '</h1>' +
+        '<h1>Request parameter is ' + query + '</h1>'
+    );
     response.end();
 }).listen(8888);
+
+console.log('Server has started')
